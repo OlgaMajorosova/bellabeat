@@ -1,0 +1,65 @@
+---
+title: "bellabeat"
+author: "OlgaMajorosova"
+date: "2022-09-17"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+install.packages("tidyverse")
+install.packages('lubridate')
+install.packages('ggplot2')
+install.packages('kableExtra')
+install.packages('scales')
+install.packages('highcharter')
+install.packages('RColorBrewer')
+install.packages('readr')
+```
+
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(janitor)
+library(tidyr)
+library(dplyr)
+library(kableExtra)   # For viewing tables
+library(scales)   # For transforming numbers in percentage
+library(highcharter) # Cool and interactive graphs
+library(RColorBrewer)  # Pallete colors
+library(readr)
+```
+
+```{r}
+daily_activity <- read_csv("C:/Users/Olga/Desktop/Google_case_study/Bellabeat/bellabeat/Data/dailyActivity_merged.csv")
+daily_sleep <- read_csv("C:/Users/Olga/Desktop/Google_case_study/Bellabeat/bellabeat/Data/sleepDay_merged.csv")
+weight_info <- read_csv("C:/Users/Olga/Desktop/Google_case_study/Bellabeat/bellabeat/Data/weightLogInfo_merged.csv")
+```
+```{r}
+kbl(daily_activity[1:5, ], 'html', caption = 'Table 1: Daily activity') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>% 
+  scroll_box(width = "100%")  # Adding a scroll bar
+
+kbl(daily_sleep[1:5, ], 'html', caption = 'Table 5: Daily sleep') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = F)
+
+kbl(weight_info[1:5, ], 'html', caption = 'Table 6: Weight info') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = F)
+
+daily_activity <- daily_activity %>% 
+  rename(Date = ActivityDate) %>% 
+  mutate(Date = as.Date(Date, format = "%m/%d/%y"))
+
+daily_sleep <- daily_sleep %>% 
+  rename(Date = SleepDay) %>% 
+  mutate(Date = as.Date(Date, format = "%m/%d/%y"))
+
+weight_info <- weight_info %>% 
+  select(-LogId) %>% 
+  mutate(Date = as.Date(Date, format = "%m/%d/%y")) %>% 
+  mutate(IsManualReport = as.factor(IsManualReport))
+```
+
